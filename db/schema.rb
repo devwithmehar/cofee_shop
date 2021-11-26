@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_26_030519) do
+ActiveRecord::Schema.define(version: 2021_11_26_031935) do
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.integer "store_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["store_id"], name: "index_categories_on_store_id"
+  end
 
   create_table "customers", force: :cascade do |t|
     t.string "name"
@@ -21,6 +29,19 @@ ActiveRecord::Schema.define(version: 2021_11_26_030519) do
     t.string "postalCode"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "quantity"
+    t.decimal "price"
+    t.integer "store_id", null: false
+    t.integer "category_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["store_id"], name: "index_items_on_store_id"
   end
 
   create_table "stores", force: :cascade do |t|
@@ -35,4 +56,7 @@ ActiveRecord::Schema.define(version: 2021_11_26_030519) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "categories", "stores"
+  add_foreign_key "items", "categories"
+  add_foreign_key "items", "stores"
 end
